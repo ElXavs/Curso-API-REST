@@ -54,6 +54,15 @@ switch(strtoupper($_SERVER['REQUEST_METHOD'])) {
     }
     break;
   case 'POST':
+    //filegetcontents lee el archivo completo y regresa el contenido
+    $json = file_get_contents('php://input');//vamos a recibir el post en crudo
+    //agregar un nuevo libro a la coleccion a traves de la decodificacion del json que recibimos
+    $books[] = json_decode($json, true);//true es para que se haga en forma de arreglo
+    //si sale bien devolver el id para el nuevo objeto
+    //arraykeys nos devuelve las claves pertenecientes a un arreglo
+    //esto sera un nuevo arreglo que solo tiene las claves
+    // echo array_keys($books)[count($books)-1]; //de esas claves pedire la ultima
+    echo json_encode($books);
     break;
   case 'PUT':
     break;
