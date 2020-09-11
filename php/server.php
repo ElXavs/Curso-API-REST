@@ -1,30 +1,30 @@
 <?php
 
-header( 'Content-Type: application/json' );
+// header( 'Content-Type: application/json' );
 
-if ( !array_key_exists( 'HTTP_X_TOKEN', $_SERVER ) ) {
+// if ( !array_key_exists( 'HTTP_X_TOKEN', $_SERVER ) ) {
 
-	die;
-}
+// 	die;
+// }
 
-$url = 'https://'.$_SERVER['HTTP_HOST'].'/auth';
+// $url = 'https://'.$_SERVER['HTTP_HOST'].'/auth';
 
-$ch = curl_init( $url );
-curl_setopt( $ch, CURLOPT_HTTPHEADER, [
-	"X-Token: {$_SERVER['HTTP_X_TOKEN']}",
-]);
-curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-$ret = curl_exec( $ch );
+// $ch = curl_init( $url );
+// curl_setopt( $ch, CURLOPT_HTTPHEADER, [
+// 	"X-Token: {$_SERVER['HTTP_X_TOKEN']}",
+// ]);
+// curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+// $ret = curl_exec( $ch );
 
-if ( curl_errno($ch) != 0 ) {
-	die ( curl_error($ch) );
-}
+// if ( curl_errno($ch) != 0 ) {
+// 	die ( curl_error($ch) );
+// }
 
-if ( $ret !== 'true' ) {
-	http_response_code( 403 );
+// if ( $ret !== 'true' ) {
+// 	http_response_code( 403 );
 
-	die;
-}
+// 	die;
+// }
 
 $allowedResourceTypes = [
 	'books',
@@ -37,7 +37,7 @@ if ( !in_array( $resourceType, $allowedResourceTypes ) ) {
 	http_response_code( 400 );
 	echo json_encode(
 		[
-			'error' => "$resourceType is un unkown",
+			'error' => "$resourceType is unkown",
 		]
 	);
 	
