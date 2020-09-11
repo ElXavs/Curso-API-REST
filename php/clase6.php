@@ -1,27 +1,44 @@
 <?php 
-//definiremos los tipos de recursos que podran ser consultables desde el exterior con un arreglo
-//asumiremos que el servidor cuenta con una base de datos con libros
+
+//definimos los recursos disponibles
 $allowedResourceTypes = [
   'books',
   'authors',
   'genre',
 ];
 
-//ahora haremos una validacion que nos diga si el tipo de recurso que estamos solicitando esta dentro del arreglo
-//con esta nueva variable asumiremos que fue informada desde el exterior a traves de la url
-//usaremos la variable get de php y diremos que el parametro tiene que coincidir con los valores del arreglo
+//validamos que el recurso este disponible
 $resourceType = $_GET['resource_type'];
-//si lo que viene de la url no pertenece al array entonces el script se termina ahi
+
 if( !in_array($resourceType, $allowedResourceTypes)){
   die;
 }
 
-//con este determinaremos lo que se hara en cada uno de los casos
-//para saber el verbo que se utilizo usamos una variable propia de php ($_SERVER['REQUEST_METHOD'])
-//esto esta dentro de un parentesis con metodo que hace que todo se pase a mayusculas
-//esta sera nuestra estructura basica del servidor web
+//Defino los recursos
+$books = [
+  1 => [
+    'titulo' => 'La sombra del viento',
+    'id_autor' => 2,
+    'id_genero' => 2,
+  ],
+  2 => [
+    'titulo' => 'La Iliada',
+    'id_autor' => 1,
+    'id_genero' => 1,
+  ],
+  3 => [
+    'titulo' => 'La casa de los espiritus',
+    'id_autor' => 3,
+    'id_genero' => 3,
+  ]  
+];
+//Avisamos que tipo de archivo va en la respuesta
+header('Content-Type: application/json');
+//Generamos la respuesta asumiendo que el pedido es correcto
 switch(strtoupper($_SERVER['REQUEST_METHOD'])) {
+  //get responde con el arreglo $books en formato json
   case 'GET':
+    echo json_encode($books);
     break;
   case 'POST':
     break;
