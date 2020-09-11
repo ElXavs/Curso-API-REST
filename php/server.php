@@ -1,5 +1,13 @@
 <?php 
 
+//obtenemos el usuario y contrasena del header de la peticion, en particular buscamos el de usuario y el de contrasena
+//si hay un usuario registrado en $_SERVER entonces obtendremos su valor, lo mismo con la contrasena
+$user = array_key_exists('PHP_AUTH_USER', $_SERVER) ? $_SERVER['PHP_AUTH_USER'] : '';
+$pwd = array_key_exists('PHP_AUTH_PW', $_SERVER) ? $_SERVER['PHP_AUTH_PW'] : '';
+//a menos que el usuario y contrasena coincidan no habra respuesta
+if ($user !== 'mauro' || $pwd !== '1234') {
+  die;
+}
 //definimos los recursos disponibles
 $allowedResourceTypes = [
   'books',
@@ -73,5 +81,12 @@ switch(strtoupper($_SERVER['REQUEST_METHOD'])) {
     }
     break;
   case 'DELETE':
+    // Validamos que el recurso exista
+    if (!empty($resourceId) && array_key_exists($resourceId,$books)) {
+      // Eliminamos el recurso
+      unset($books[$resourceId]);
+    }
+
+    echo json_encode($books);
     break;
 }
