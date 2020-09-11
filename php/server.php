@@ -1,13 +1,30 @@
 <?php 
 
-//obtenemos el usuario y contrasena del header de la peticion, en particular buscamos el de usuario y el de contrasena
-//si hay un usuario registrado en $_SERVER entonces obtendremos su valor, lo mismo con la contrasena
-$user = array_key_exists('PHP_AUTH_USER', $_SERVER) ? $_SERVER['PHP_AUTH_USER'] : '';
-$pwd = array_key_exists('PHP_AUTH_PW', $_SERVER) ? $_SERVER['PHP_AUTH_PW'] : '';
-//a menos que el usuario y contrasena coincidan no habra respuesta
-if ($user !== 'mauro' || $pwd !== '1234') {
+// Validar que la informacion este completa, que el usuario nos de un hash, una marca de tiempo y el uid
+if (
+  !array_key_exists('HTTP_X_HASH', $_SERVER) ||
+  !array_key_exists('HTTP_X_TIMESTAMP', $_SERVER) ||
+  !array_key_exists('HTTP_X_UID', $_SERVER)
+) {
   die;
 }
+// Asignamos varias variables en una sola instruccion
+// tomamos los tres encabezados y los asignamos en variables para trabajar con ellos, respectivamente
+list($hash,$uid,$timestamp) = [
+  $_SERVER['HTTP_X_HASH'],
+  $_SERVER['HTTP_X_UID'],
+  $_SERVER['HTTP_X_TIMESTAMP'],
+];
+// Le damos la clave secreta
+$secret = 'Sh!! No se lo cuentes a nadie!';
+// Generamos nuestra propia version del hash usando una funcion de hashing, que se utiliza en criptografia
+// Y concatenamos todo lo recibido por el usuario mas las clave secreta
+$newHash = sha1($uid.$timestamp.$secret);
+// Validamos el hash
+if ($newHash !== $hash) {
+  die;
+}
+
 //definimos los recursos disponibles
 $allowedResourceTypes = [
   'books',
